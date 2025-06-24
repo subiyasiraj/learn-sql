@@ -33,3 +33,28 @@ SELECT
   100 AS price,
   50 AS discount,
   100 / NULLIF(50, 0) AS price_ratio;
+
+-- IS NULL and IS NOT NULL, display all the orders that have shipping address - 
+select * 
+from Orders
+where ShipAddr IS NOT NULL
+
+-- IS NULL and IS NOT NULL, display all the orders that do not have shipping address - 
+select * 
+from Orders
+where ShipAddr IS NULL
+
+-- IS NULL and IS NOT NULL, for left anti join - 
+select *
+from customers
+left join orders
+on orders.Customerid = customers.Customerid
+where orders.Customerid is null
+
+-- Data policy, Trim to have only empty string and NULLIF for only NULLS - 
+select NULLIF(Trim(FirstName), ''), Datalength(NULLIF(Trim(FirstName), ''))
+from Customers
+
+-- Data policy, Trim to have only empty string and NULLIF for only NULLS, or have default values(but it will take extra space) - 
+select coalesce(NULLIF(Trim(FirstName), ''), 'Missing Data')
+from Customers
