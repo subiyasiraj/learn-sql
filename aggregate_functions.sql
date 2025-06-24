@@ -27,3 +27,9 @@ select *,
 Case when customer_id IS NULL then 1 else 0 END
 from orders
 order by Case when customer_id IS NULL then 1 else 0 END, customer_id
+
+-- NULLIF helps in divide by zero error --
+SELECT 
+  100 AS price,
+  50 AS discount,
+  100 / NULLIF(50, 0) AS price_ratio;
