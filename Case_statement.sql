@@ -5,3 +5,8 @@ CASE WHEN count(orderid) > 5 THEN 'High' WHEN count(orderid) > 3 THEN 'Medium' W
 from orders
 group by productID)t
 order by  productID desc
+
+-- retreive employee details with gender displayed as full text --
+select FirstName, LastName,
+Case when gender = 'M' Then 'Male' when gender ='F' THEN 'Female' else 'others'  END Full_Gender
+from employees
