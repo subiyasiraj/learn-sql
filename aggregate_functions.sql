@@ -13,3 +13,17 @@ from customers
 
 select FirstName + ' ' + coalesce(LastName, '') as FullName, coalesce(Score, 0) + 10 AS TotalScore, Score
 from Customers
+
+-- Handle Joins in case of NULL values --
+
+select first_name, order_date, coalesce(customer_id, 3) 
+from customers
+join orders
+on customers.id = coalesce(orders.customer_id, 3)
+
+-- Handle orderby in case of Nulls, where Nulls are in the end --
+
+select *,
+Case when customer_id IS NULL then 1 else 0 END
+from orders
+order by Case when customer_id IS NULL then 1 else 0 END, customer_id
