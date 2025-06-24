@@ -8,3 +8,8 @@ left to right untill the value is not null, and if the last value is Null it jus
 /* Select avg score of customers*/
 select avg(Score) over () as AVG_WithNull, avg(coalesce(Score, 0)) over () as AVG_WithNoNull, score
 from customers
+
+--Display full name of customers in a single field, add 10 bonus points for their score--
+
+select FirstName + ' ' + coalesce(LastName, '') as FullName, coalesce(Score, 0) + 10 AS TotalScore, Score
+from Customers
