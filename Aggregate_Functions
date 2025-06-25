@@ -14,3 +14,10 @@ group by ProductID
 -- total sales for each product also provide orderID and OrderDate --
 select distinct sum(sales) over(partition by productID) total_sum, productID, OrderID, OrderDate
 from orders
+
+-- window function with aggregate --
+select productID, OrderDate, sum(sales) 
+over(partition by productID order by 
+productID rows between 
+current row and unbounded following)
+from Orders
