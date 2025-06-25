@@ -1,1 +1,16 @@
+-- select total number of customers - 
+select count(*)
+from customers
 
+-- find sum, max, min and avg of scores --
+select sum(score) sum_score, max(Score) max_score,min(score) min_score, avg(coalesce(score,0)) avg_Score
+from customers
+
+-- find the total orders across each product --
+select count(*), ProductID
+from orders
+group by ProductID
+
+-- total sales for each product also provide orderID and OrderDate --
+select distinct sum(sales) over(partition by productID) total_sum, productID, OrderID, OrderDate
+from orders
