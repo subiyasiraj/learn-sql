@@ -53,3 +53,26 @@ WHERE sales > (
 -- Min and Max - find the average of sales by product --
 select min(sales) over(), max(sales) over(), min(sales) over(partition by productID), max(sales) over(partition by productID)
 from orders
+
+-- Min and Max - list of employees having highest salary --
+select *
+from (select max(salary) over() max_Salary, firstName, salary
+from employees)t
+where salary = max_Salary
+
+-- Min and Max - deviation from min and max --
+select *,max(sales) over() - sales as dev_max,sales - min(sales) over() as dev_min
+from orders
+
+-- running total - from day1 --
+select *, sum(sales) over(order by productID rows between unbounded preceding and current row)
+from orders
+
+-- rolling total - from between --
+select *, sum(sales) over(order by productID rows between 2 preceding and current row)
+from orders
+
+-- calculate the average sales of current and next row --
+select *, avg(sales) over(order by productID rows between current row and 1 following)
+from orders
+
