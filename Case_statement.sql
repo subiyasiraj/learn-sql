@@ -31,3 +31,8 @@ when score is null then 0
 else score
 end ) over() no_null 
 from Customers
+
+-- how many times a customer has ordered with sales greater than 30 - 
+select customerID, sum(case when salespersonID > 1 then 1 else 0 end) as flag
+from orders
+group by customerID
