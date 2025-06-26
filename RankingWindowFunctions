@@ -1,0 +1,21 @@
+  -- ROW_NUMBER - rank the orders based on their sales from highest to lowest --
+  select sales, salespersonID,
+  row_number() over(order by sales desc)
+  from orders
+
+  -- Rank - rank the orders based on their sales from highest to lowest --
+  select sales, salespersonID,
+  rank() over(order by sales desc)
+  from orders
+
+  -- Dense_rank - rank the orders based on their sales from highest to lowest --
+  select sales, salespersonID,
+  dense_rank() over(order by sales desc)
+  from orders
+
+ -- find the highest rank for each product --
+  select productID, sales
+  from (select sales, ProductID,
+  row_number() over(partition by ProductID order by sales desc) as ranks
+  from orders)t
+  where ranks = 1
