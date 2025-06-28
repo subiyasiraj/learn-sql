@@ -76,3 +76,21 @@ from orders
 select *, avg(sales) over(order by productID rows between current row and 1 following)
 from orders
 
+-- segment all orders into 3 categories High Medium and Low--
+
+Select *,
+Case when buckets = 1 then 'High'
+when buckets = 2 then 'Medium'
+when buckets = 3 then 'High'
+END
+from(
+select *, ntile(3) over(order by OrderID) as buckets
+from orders)t
+
+-- Find products that fall within highest 40% --
+select *
+from (
+select *, CUME_DIST() over(order by price desc) as cume_dist
+from products
+)t
+where cume_dist <= 0.4
