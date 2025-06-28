@@ -1,0 +1,22 @@
+-- MoM performance using LAG --
+
+select *,round((cast((prev_month_sales - month_sales) as float))/prev_month_sales *100, 1)
+from (select datename(month, orderDate) as order_month, sum(sales) as month_sales, Lag(sum(sales), 1) over(order by datename(month, orderDate)) as prev_month_sales 
+from orders
+group by datename(month, orderDate))t
+
+-- Rank customers based on their prev rank --
+select *, dense_rank() over( order by avg_diff)
+from(
+select customerID, avg(date_diff) as avg_diff
+from (select *, LAG(OrderDate) over(partition by CustomerID order by orderDate) as prev_order, coalesce(DATEDIFF(day, LAG(OrderDate) over(partition by CustomerID order by orderDate), OrderDate), 0) as date_diff
+from orders)t
+group by CustomerID
+)t
+
+--find lowest and highest sales of each product --
+
+select distinct productid, 
+first_value(sales) over(partition by productid order by sales desc) as highest, 
+last_value(sales) over(partition by productid order by sales desc rows between current row and unbounded following) as lowest
+from orders
