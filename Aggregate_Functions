@@ -87,7 +87,7 @@ from(
 select *, ntile(3) over(order by OrderID) as buckets
 from orders)t
 
--- Find products that fall within highest 40% --
+-- CUME_DIST - Find products that fall within highest 40% --
 select *
 from (
 select *, CUME_DIST() over(order by price desc) as cume_dist
