@@ -1,0 +1,38 @@
+-- Create a View --
+Create view v_monthly_sales as
+(
+select format(orderDate, 'yyyy-MM') month1, 
+sum(sales) total_sales,
+count(sales) count_sales
+from orders
+group by format(orderDate, 'yyyy-MM')
+)
+
+select *
+from v_monthly_sales
+
+-- delete view --
+drop view v_monthly_sales
+
+-- check if view exists, the delete --
+if object_ID('v_monthly_sales','v') is not null
+drop view v_monthly_sales
+
+-- View - data related to sales team ---
+create view all_details_USA as(
+select 
+o.orderID,
+o.orderDate,
+p.productID,
+p.product,
+p.category,
+c.country,
+c.CustomerID,
+c.Firstname + ' ' + c.LastName as firstname, 
+o.sales
+from Orders o
+left join products p
+on o.productID = p.productID
+left join customers c
+on c.customerID = o.CustomerID
+where c.country != 'USA')
