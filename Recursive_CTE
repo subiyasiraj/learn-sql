@@ -1,0 +1,40 @@
+-- Generate sequence of number from 1 to 20 --
+with cte_number_sequence as 
+(select 1 as My_Number
+union all
+select My_number + 1
+from cte_number_sequence
+where My_number < 20
+)
+
+select *
+from cte_number_sequence
+
+-- MAXRECURSION in main query --
+with cte_number_sequence as 
+(select 1 as My_Number
+union all
+select My_number + 1
+from cte_number_sequence
+where My_number < 20
+)
+
+select *
+from cte_number_sequence
+OPTION (MAXRECURSION 10)
+
+-- show employee hiearachy by displaying each employees level within the organization --
+with employee_hierarchy as 
+(
+select employeeID, firstName, LastName, ManagerID, 1 as hierarchy
+from employees
+where ManagerID is Null
+Union All
+select e.EmployeeID, e.firstName, e.LastName, e.ManagerID, 1 + eh.hierarchy as hierarchy
+from employees e
+join employee_hierarchy eh
+on eh.employeeID = e.ManagerID
+)
+
+select *
+from employee_hierarchy
