@@ -1,0 +1,11 @@
+-- sum of dales by month --
+SELECT 
+  MONTH(orderDate) AS order_month,
+  SUM(sales) AS total_sales
+INTO total_num_month
+FROM orders
+GROUP BY MONTH(orderDate);
+
+-- T-SQL to check and drop the CTAS --
+if object_id('total_num_month','U') is not null
+drop table total_num_month
