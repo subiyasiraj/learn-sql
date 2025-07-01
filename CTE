@@ -1,0 +1,39 @@
+-- step1- Find total sales per customer --
+with CTE_total_sales as 
+(select customerID, sum(sales) as total_sales
+from orders
+group by customerID)
+-- step 2- Find the last order date per customer --
+, CTE_last_order as
+(SELECT customerID, MAX(orderDate) AS latest_order_date
+FROM orders
+GROUP BY customerID
+)
+-- step 3- rank customers based on total sales (Nested CTE) --
+, CTE_rank_customers as
+(
+select customerID, rank() over(order by total_sales desc) as rank_customer
+from CTE_total_sales
+)
+-- step 4 - segment customers based on their total sales (Nested CTE) --
+, CTE_segment_customers as 
+(
+select customerID, case when total_sales > 1500 then 'High'
+when total_sales > 1000 then 'Medium'
+when total_sales > 400 then 'Low'
+when total_sales > 0 then 'Very Low'
+end status1
+from CTE_total_sales
+
+)
+
+select c.firstName, c.country, cte.total_sales, cte2.latest_order_date, cte3.rank_customer, cte4.status1
+from customers c
+left join CTE_total_sales cte
+on c.customerID = cte.customerID
+left join CTE_last_order cte2
+on c.customerID = cte2.customerID
+left join CTE_rank_customers cte3
+on c.customerID = cte3.customerID
+left join CTE_segment_customers cte4
+on c.customerID = cte4.customerID
