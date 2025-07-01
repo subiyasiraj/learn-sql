@@ -1,0 +1,7 @@
+-- correlated subquery - show the order details of customers made in Germany --
+select *
+from orders o
+where exists (select 1
+from customers c
+where o.customerID = c.customerID and c.country = 'Germany')
+
