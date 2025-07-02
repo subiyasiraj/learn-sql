@@ -1,0 +1,10 @@
+-- create a Tem[p table in SQL server --
+select *
+into #temp_table
+from orders
+
+-- create a Temp table in PosgrSQL --
+
+CREATE TEMP TABLE temp_table AS
+SELECT *
+FROM orders;
