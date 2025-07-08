@@ -1,0 +1,10 @@
+--Stored procedure---
+Create procedure US_details as
+begin
+select count(*) as Total_Customer, avg(score) as AVG_SCORE
+from customers
+where country = 'USA';
+end
+
+-- execute the stored procedure--
+exec US_details
