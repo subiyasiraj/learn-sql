@@ -1,0 +1,22 @@
+--Step 1 create the log--
+create table Employee_Logs (
+	logID int identity(1,1) primary Key,
+	EmployeeID int not null,
+	LogMessage Varchar(250) not null,
+	LogDate date not null
+
+)
+
+-- Step 2 create trigger--
+create trigger trg_Employeelogs on Employees 
+after insert as
+begin
+	insert into Employee_Logs(EmployeeID, LogMessage, LogDate)
+	select employeeID, 
+	'Employee added' + cast(EmployeeID as varchar),
+	getdate()
+	from inserted
+end
+
+-- step 3: whenever a new record is inserted, it will insert in logs table---
+insert into employees values (7, 'Sana', 'Sheikh', 'Sales', format(getDate(),'yyyy-MM-dd'), 'F', 60000, 3)
